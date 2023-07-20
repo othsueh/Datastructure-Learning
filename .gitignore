@@ -1,4 +1,42 @@
-
+*
+!*/
+!*.*
 !Makefile
-!*.c
-!*.cpp
+
+# Object files
+*.o
+*.a
+*.dll
+*.so
+*.so.*
+*.dylib
+**/.obj/
+
+# Executables
+*.exe
+*.out
+*.app
+*.hex
+*.dev
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Test files
+**/.test/
+
+# Apple file indexes
+**/.DS_Store
+
+# Node.js modules
+**/node_modules/
+package-lock.json
+
+# Distributions
+*.pdf
+*.zip
+*.tar
+*.tar.gz
