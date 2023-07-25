@@ -9,8 +9,9 @@ all:
 	# g++ neoj36.cpp -o neoj36
 	# g++ brackets.cpp -o brackets
 	# g++ fourOperations.cpp -o fourOperations
-	g++ calcArea.cpp -o calcArea
+	# g++ calcArea.cpp -o calcArea
+	g++ learnDFS.cpp -o learnDFS
 
 clean:
 	rm -rf learnDeque learnStack learnPriorityQueue learnVector learnLinkedList learnSingleLinkedList
-	rm -rf learnSet neoj36 brackets twoOperations calcArea
+	rm -rf learnSet neoj36 brackets twoOperations calcArea learnDFS
