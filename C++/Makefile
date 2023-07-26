@@ -10,7 +10,8 @@ all:
 	# g++ brackets.cpp -o brackets
 	# g++ fourOperations.cpp -o fourOperations
 	# g++ calcArea.cpp -o calcArea
-	g++ learnDFS.cpp -o learnDFS
+	# g++ learnDFS.cpp -o learnDFS
+	g++ uva722.cpp -o uva722
 
 clean:
 	rm -rf learnDeque learnStack learnPriorityQueue learnVector learnLinkedList learnSingleLinkedList
