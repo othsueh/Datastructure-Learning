@@ -12,8 +12,9 @@ all:
 	# g++ calcArea.cpp -o calcArea
 	# g++ learnDFS.cpp -o learnDFS
 	# g++ uva722.cpp -o uva722
-	g++ uva10959.cpp -o uva10959
+	# g++ uva10959.cpp -o uva10959
+	g++ uva567.cpp -o uva567
 
 clean:
 	rm -rf learnDeque learnStack learnPriorityQueue learnVector learnLinkedList learnSingleLinkedList
-	rm -rf learnSet neoj36 brackets twoOperations calcArea learnDFS uva722 uva10959
+	rm -rf learnSet neoj36 brackets twoOperations calcArea learnDFS uva722 uva10959 uva567
