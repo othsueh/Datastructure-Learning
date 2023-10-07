@@ -62,8 +62,12 @@ void printPolynomial(polynomial *p)
 {
     term *temp = p->poly;
     while(temp != NULL){
-        if(temp == p->poly)
-            printf("%dx^%d", temp->cof, temp->exp);
+        if(temp == p->poly){
+            if(temp->exp == 0)
+                printf("%d", temp->cof);
+            else
+                printf("%dx^%d", temp->cof, temp->exp);
+        }
         else 
             printf("%dx^%d", ABS(temp->cof), temp->exp);
         temp = temp->next;
@@ -166,7 +170,7 @@ polynomial *setPolynomial(polynomial *p)
     printf("Polynomial %s is now created,set value to it\n", p->name);
     int cof, exp;
     while(1){
-        int result = scanf("%dx^%d", &cof, &exp);
+        int result = scanf(" %dx^%d", &cof, &exp);
         if(result == 1)
             break;
         else{
@@ -259,6 +263,16 @@ void inputNmatch(polynomial **p1, polynomial **p2)
     *p2 = matchPolynomial(b);
     free(a);
     free(b);
+}
+void mulPolynomial(polynomial *p1, polynomial *p2, polynomial *p)
+{
+    term *t1 = p1->poly;
+    term *t2 = p2->poly;
+    while(t1){
+        for(t2 = p2->poly;t2;t2 = t2->next)
+            addTerm(p,t1->cof * t2->cof, t1->exp + t2->exp);
+        t1 = t1->next;
+    }
 }
 int main()
 {
@@ -359,6 +373,16 @@ int main()
                 freePolynomial(ps);
                 break;
             case 8:
+                polynomial *pm = create();
+                polynomial *p111, *p222;
+                inputNmatch(&p111,  &p222);
+                if(!p11 || !p22){
+                    printf("No such polynomial.\n");
+                    break;
+                }
+                mulPolynomial(p111,p222,pm);
+                printPolynomial(pm);
+                freePolynomial(pm);
                 break;
             case 9:
                 break;
