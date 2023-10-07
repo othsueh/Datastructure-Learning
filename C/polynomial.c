@@ -171,7 +171,7 @@ polynomial *setPolynomial(polynomial *p)
     pol[polycount++] = current;
     return p;
 }
-void *deleteTerm(term *p)
+term *deleteTerm(term *p)
 {
     term *t = p;
     p = p->next;
