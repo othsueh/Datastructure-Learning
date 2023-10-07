@@ -43,13 +43,9 @@ pointer of the string to be input.
 `char *`  
 pointer of the string.
 
-### `printPolynomial()`
-input type : `polynomial *`
-function : 
-return type : ``
 ### printPolynomial 
 ---
-`void printPolynomial(polynomial *p)`
+`void printPolynomial(polynomial *p)`  
 print the polynomial in the format of a0 + a1x + a2x^2 + ... + an-1x^n-1 + anx^n.
 #### Parameters
 `polynomial *`  

@@ -4,7 +4,6 @@
 #define NAMELEN 1000
 #define ABS(x) ((x)<0 ? -(x) : (x))
 
-int start = 0;
 typedef struct term{
     int cof;
     int exp;
@@ -19,7 +18,6 @@ typedef struct{
 
 polynomial *pol[1000];
 polynomial *current = NULL;
-term *temp = NULL;
 int polycount = 0;
 void UI()
 {
@@ -39,29 +37,35 @@ void UI()
 }
 void freePolynomial(polynomial *p)
 {
+    if(p == NULL)
+        return;
+    if(p->name != NULL)
+        free(p->name);
+    
     term *current = p->poly;
     while(current != NULL){
         term *temp = current;
         current = current->next;
         free(temp);
     }
-    free(p->name);
     free(p);
     return;
 }
 char *setName(char *name)
 {
     name = (char *)malloc(sizeof(char) * NAMELEN);
-    getchar();
     fgets(name, NAMELEN, stdin);
     name[strlen(name) - 1] = '\0';
     return name;
 }
 void printPolynomial(polynomial *p)
 {
-    temp = p->poly;
+    term *temp = p->poly;
     while(temp != NULL){
-        printf("%dx^%d", ABS(temp->cof), temp->exp);
+        if(temp == p->poly)
+            printf("%dx^%d", temp->cof, temp->exp);
+        else 
+            printf("%dx^%d", ABS(temp->cof), temp->exp);
         temp = temp->next;
         if(temp != NULL){
             if(temp->cof < 0)    printf(" - ");
@@ -74,8 +78,8 @@ void printPolynomial(polynomial *p)
 polynomial *create()
 {
     polynomial *p = (polynomial *)malloc(sizeof(polynomial));
-    p->poly = (term *)malloc(sizeof(term));
-    p->poly->next = NULL;
+    p->poly = NULL;
+    p->name = NULL;
     p->len = 0;
     return p;
 }
@@ -125,38 +129,42 @@ void findTerm(term *p, int exp)
     return;
 }
 
-term *addTerm(term *p, int cof, int exp)
+void addTerm(polynomial *p, int cof, int exp)
 {
-    if(start){
-        p->cof = cof;
-        p->exp = exp;
-        start = 0;
-        current->len++;
-        return p;
+    if(cof == 0)
+        return;
+    term *current = p->poly;
+    if(current == NULL){
+        p->poly = (term *)malloc(sizeof(term));
+        p->poly->cof = cof;
+        p->poly->exp = exp;
+        p->poly->next = NULL;
+        p->len++;
+        return;
     }
-    temp = current->poly;
-    for(int i = 0; i < current->len; i++){
+    term *temp = current;
+    for(;temp;temp = temp->next){
         if(temp->exp == exp){
             temp->cof += cof;
-            return p;
+            return;
         }
-        temp = temp->next;
+        if(temp->next == NULL)
+            break;
     }
     term *t = (term *)malloc(sizeof(term));
     t->cof = cof;
     t->exp = exp;
-    t->next = p->next;
-    p->next = t;
-    current->len++;
-    return t;
+    t->next = temp->next;
+    temp->next = t;
+    p->len++;
+    return;
 }
 polynomial *setPolynomial(polynomial *p)
 {
+    getchar();
     p->name = setName(p->name);
-    printf("Polynomial %s is now created,set value to it\n", current->name);
-    start = 1;
+    printf("Polynomial %s is now created,set value to it\n", p->name);
     int cof, exp;
-    term *cterm = p->poly;
     while(1){
         int result = scanf("%dx^%d", &cof, &exp);
         if(result == 1)
@@ -164,31 +172,93 @@ polynomial *setPolynomial(polynomial *p)
         else{
             if(cof == 0)
                 continue;
-            cterm = addTerm(cterm, cof, exp);
+            addTerm(p,cof,exp);
         }
     }
     p->poly = mergeSort(p->poly);
-    pol[polycount++] = current;
+    pol[polycount++] = p;
     return p;
 }
-term *deleteTerm(term *p)
+term *deleteTerm(term *p,int *len)
 {
     term *t = p;
     p = p->next;
     free(t);
-    current->len--;
+    *len--;
     return p;
 }
 polynomial* matchPolynomial(char *name)
 {
+    polynomial *temp = NULL;
     for(int i = 0; i < polycount; i++){
         if(strcmp(pol[i]->name, name) == 0){
-            current = pol[i];
-            printf("Polynomial %s is now current polynomial.\n", current->name);
+            temp = pol[i];
             break;
         }
     }
-    return current;
+    return temp;
+}
+int compare(int a, int b) {
+    if (a == b) {
+        return 0;
+    } else if (a > b) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+void addPolynomial(polynomial *p1, polynomial *p2, polynomial *p)
+{
+    term *t1 = p1->poly;
+    term *t2 = p2->poly;
+    while(t1 && t2){
+        switch(compare(t1->exp, t2->exp)){
+            case 1:
+                addTerm(p, t2->cof, t2->exp);
+                t2 = t2->next;
+                break;
+            case -1:
+                addTerm(p, t1->cof, t1->exp);
+                t1 = t1->next;
+                break;
+            case 0:
+                addTerm(p, t1->cof + t2->cof, t1->exp);
+                t1 = t1->next;
+                t2 = t2->next;
+                break;
+        }
+    }
+    while(t1){
+        addTerm(p, t1->cof, t1->exp);
+        t1 = t1->next;
+    }
+    while(t2){
+        addTerm(p, t2->cof, t2->exp);
+        t2 = t2->next;
+    }
+}
+void subPolynomial(polynomial *p1, polynomial *p2, polynomial *p)
+{
+    term *temp = p2->poly;
+    for(;temp;temp = temp->next)
+        temp->cof *= -1;
+    addPolynomial(p1, p2, p);
+    temp = p2->poly;
+    for(;temp;temp = temp->next)
+        temp->cof *= -1; 
+}
+void inputNmatch(polynomial **p1, polynomial **p2)
+{
+    char *a, *b;
+    printf("Please enter the name of the first polynomial:\n");
+    getchar();
+    a = setName(a);
+    printf("Please enter the name of the second polynomial:\n");
+    b = setName(b);
+    *p1 = matchPolynomial(a);
+    *p2 = matchPolynomial(b);
+    free(a);
+    free(b);
 }
 int main()
 {
@@ -206,12 +276,18 @@ int main()
                 printf("Polynomial %s has saved to current polynomial.\n", current->name);
                 break;
             case 2:
+                getchar();
                 char *name = setName(name);
-                current = matchPolynomial(name);
-                if(current == NULL)
+                polynomial *temppoly = NULL;
+                temppoly = matchPolynomial(name);
+                if(temppoly == NULL)
                     printf("No such polynomial.\n");
                 else
+                    current = temppoly;
+                if(current != NULL){
+                    printf("Current polynomial is %s\n", current->name);
                     printPolynomial(current);
+                }
                 free(name);
                 break;
             case 3:
@@ -232,7 +308,7 @@ int main()
                     printf("Coefficient is 0, no need to add.\n");
                     break;
                 }
-                addTerm(current->poly, cof, exp);
+                addTerm(current, cof, exp);
                 current->poly = mergeSort(current->poly);
                 break;
             case 5:
@@ -243,12 +319,12 @@ int main()
                 scanf("%d", &exp);
                 ltemp = current->poly;
                 if(ltemp->exp == exp){
-                    current->poly = deleteTerm(ltemp);
+                    current->poly = deleteTerm(ltemp, &current->len);
                     break;
                 }
                 for(int i = 0; i < current->len-1; i++){
                     if(ltemp->next->exp == exp){
-                        ltemp->next = deleteTerm(ltemp->next);
+                        ltemp->next = deleteTerm(ltemp->next, &current->len);
                         break;
                     }
                     if(i == current->len - 2){
@@ -259,8 +335,28 @@ int main()
                 }
                 break;
             case 6:
+                polynomial *pa  = create();
+                polynomial *p1, *p2;
+                inputNmatch(&p1, &p2);
+                if(!p1 || !p2){
+                    printf("No such polynomial.\n");
+                    break;
+                }
+                addPolynomial(p1, p2, pa);
+                printPolynomial(pa);
+                freePolynomial(pa);
                 break;
             case 7:
+                polynomial *ps  = create();
+                polynomial *p11, *p22;
+                inputNmatch(&p11, &p22);
+                if(!p11 || !p22){
+                    printf("No such polynomial.\n");
+                    break;
+                }
+                subPolynomial(p11, p22, ps);
+                printPolynomial(ps);
+                freePolynomial(ps);
                 break;
             case 8:
                 break;
