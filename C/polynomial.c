@@ -133,6 +133,14 @@ void findTerm(term *p, int exp)
     return;
 }
 
+term *deleteTerm(term *p,int *len)
+{
+    term *t = p;
+    p = p->next;
+    free(t);
+    *len--;
+    return p;
+}
 void addTerm(polynomial *p, int cof, int exp)
 {
     if(cof == 0)
@@ -150,6 +158,12 @@ void addTerm(polynomial *p, int cof, int exp)
     for(;temp;temp = temp->next){
         if(temp->exp == exp){
             temp->cof += cof;
+            if(temp->cof == 0){
+                if(temp == p->poly)
+                    p->poly = deleteTerm(temp, &p->len);
+                else
+                    temp = deleteTerm(temp, &p->len);
+            }
             return;
         }
         if(temp->next == NULL)
@@ -181,14 +195,6 @@ polynomial *setPolynomial(polynomial *p)
     }
     p->poly = mergeSort(p->poly);
     pol[polycount++] = p;
-    return p;
-}
-term *deleteTerm(term *p,int *len)
-{
-    term *t = p;
-    p = p->next;
-    free(t);
-    *len--;
     return p;
 }
 polynomial* matchPolynomial(char *name)
@@ -273,6 +279,38 @@ void mulPolynomial(polynomial *p1, polynomial *p2, polynomial *p)
             addTerm(p,t1->cof * t2->cof, t1->exp + t2->exp);
         t1 = t1->next;
     }
+}
+term *getlastterm(term* t)
+{
+    while(t->next)
+        t = t->next;
+    return t;
+}
+void divPolynomial(polynomial *p1, polynomial *p2, polynomial *q, polynomial *r)
+{
+    term *t1 = p1->poly;
+    for(;t1;t1 = t1->next)
+        addTerm(r, t1->cof, t1->exp);
+    t1 = r->poly;
+    t1 = getlastterm(t1);
+    term *t2 = p2->poly;
+    t2 = getlastterm(t2);
+    printf("t1->exp = %d, t2->exp = %d\n", t1->exp, t2->exp);
+    while(t1->exp >= t2->exp){
+        int scalar = t1->cof/t2->cof;
+        int exp = t1->exp - t2->exp;
+        printf("scalar = %d, exp = %d\n", scalar, exp);
+        addTerm(q, scalar, exp);
+        for(t2 = p2->poly;t2;t2 = t2->next)
+            addTerm(r, -scalar * t2->cof, exp+t2->exp);
+        t2 = p2->poly;
+        t2 = getlastterm(t2);
+        if(r->poly != NULL){
+            t1 = r->poly;
+            t1 = getlastterm(t1);
+            printf("test\n");
+        }
+    } 
 }
 int main()
 {
@@ -385,6 +423,25 @@ int main()
                 freePolynomial(pm);
                 break;
             case 9:
+                polynomial *pq = create();
+                polynomial *pr = create();
+                polynomial *p1111, *p2222;
+                inputNmatch(&p1111, &p2222);
+                if(!p11 || !p22){
+                    printf("No such polynomial.\n");
+                    break;
+                }
+                divPolynomial(p1111, p2222, pq, pr);
+                if(pq->poly){
+                    printf("The quotient is:\n");
+                    printPolynomial(pq);
+                }
+                if(pr->poly){
+                    printf("The remainder is:\n");
+                    printPolynomial(pr);
+                }
+                freePolynomial(pq);
+                freePolynomial(pr);
                 break;
             case 10:
                 for(int i = 0; i < polycount; i++)
