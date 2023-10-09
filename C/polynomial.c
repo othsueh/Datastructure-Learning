@@ -3,6 +3,7 @@
 #include <string.h>
 #define NAMELEN 1000
 #define ABS(x) ((x)<0 ? -(x) : (x))
+// "Hello, I'm othsueh, this is my polynomial program!\n 🌹 start with Welcome To The Jungle by Guns N' Roses 🌹\n"
 
 typedef struct term{
     int cof;
@@ -21,8 +22,8 @@ polynomial *current = NULL;
 int polycount = 0;
 void UI()
 {
-    printf("Hello, I'm othsueh, this is my polynomial program!\n 🌹 start with Welcome To The Jungle by Guns N' Roses 🌹\n");
     printf("Please choose the function you want to use and enter the number of the function name:\n");
+    printf("===============================================================================\n");
     printf("1) Create a polynomial and name it.(It will automatically be current polynomial)\n");
     printf("2) Set current polynomial by name and present it\n");
     printf("3) Show the coefficient of the term with the given exponent from current polynomial\n");
@@ -31,8 +32,9 @@ void UI()
     printf("6) Add two polynomials and show the result\n");
     printf("7) Subtract two polynomials and show the result\n");
     printf("8) Multiply two polynomials and show the result\n");
-    printf("9) Divide two polynomials and show the quotient and remainder\n");
-    printf("10) Exit\n");
+    // printf("9) Divide two polynomials and show the quotient and remainder\n");
+    printf("9) Exit\n");
+    printf("===============================================================================\n");
     return;
 }
 void freePolynomial(polynomial *p)
@@ -280,38 +282,6 @@ void mulPolynomial(polynomial *p1, polynomial *p2, polynomial *p)
         t1 = t1->next;
     }
 }
-term *getlastterm(term* t)
-{
-    while(t->next)
-        t = t->next;
-    return t;
-}
-void divPolynomial(polynomial *p1, polynomial *p2, polynomial *q, polynomial *r)
-{
-    term *t1 = p1->poly;
-    for(;t1;t1 = t1->next)
-        addTerm(r, t1->cof, t1->exp);
-    t1 = r->poly;
-    t1 = getlastterm(t1);
-    term *t2 = p2->poly;
-    t2 = getlastterm(t2);
-    printf("t1->exp = %d, t2->exp = %d\n", t1->exp, t2->exp);
-    while(t1->exp >= t2->exp){
-        int scalar = t1->cof/t2->cof;
-        int exp = t1->exp - t2->exp;
-        printf("scalar = %d, exp = %d\n", scalar, exp);
-        addTerm(q, scalar, exp);
-        for(t2 = p2->poly;t2;t2 = t2->next)
-            addTerm(r, -scalar * t2->cof, exp+t2->exp);
-        t2 = p2->poly;
-        t2 = getlastterm(t2);
-        if(r->poly != NULL){
-            t1 = r->poly;
-            t1 = getlastterm(t1);
-            printf("test\n");
-        }
-    } 
-}
 int main()
 {
     int flag = 0;
@@ -423,27 +393,6 @@ int main()
                 freePolynomial(pm);
                 break;
             case 9:
-                polynomial *pq = create();
-                polynomial *pr = create();
-                polynomial *p1111, *p2222;
-                inputNmatch(&p1111, &p2222);
-                if(!p11 || !p22){
-                    printf("No such polynomial.\n");
-                    break;
-                }
-                divPolynomial(p1111, p2222, pq, pr);
-                if(pq->poly){
-                    printf("The quotient is:\n");
-                    printPolynomial(pq);
-                }
-                if(pr->poly){
-                    printf("The remainder is:\n");
-                    printPolynomial(pr);
-                }
-                freePolynomial(pq);
-                freePolynomial(pr);
-                break;
-            case 10:
                 for(int i = 0; i < polycount; i++)
                     freePolynomial(pol[i]);
                 flag = 1;
@@ -456,3 +405,50 @@ int main()
     }
     return 0;
 }
+//topic : remain for division
+// void divPolynomial(polynomial *p1, polynomial *p2, polynomial *q, polynomial *r)
+// {
+//     term *t1 = p1->poly;
+//     for(;t1;t1 = t1->next)
+//         addTerm(r, t1->cof, t1->exp);
+//     t1 = r->poly;
+//     t1 = getlastterm(t1);
+//     term *t2 = p2->poly;
+//     t2 = getlastterm(t2);
+//     while(t1->exp >= t2->exp){
+//         int scalar = t1->cof/t2->cof;
+//         int exp = t1->exp - t2->exp;
+//         addTerm(q, scalar, exp);
+//         for(t2 = p2->poly;t2;t2 = t2->next)
+//             addTerm(r, -scalar * t2->cof, exp+t2->exp);
+//         t2 = p2->poly;
+//         t2 = getlastterm(t2);
+//     } 
+// }
+                // polynomial *pq = create();
+                // polynomial *pr = create();
+                // polynomial *p1111, *p2222;
+                // inputNmatch(&p1111, &p2222);
+                // if(!p11 || !p22){
+                //     printf("No such polynomial.\n");
+                //     break;
+                // }
+                // divPolynomial(p1111, p2222, pq, pr);
+                // if(pq->poly){
+                //     printf("The quotient is:\n");
+                //     printPolynomial(pq);
+                // }
+                // if(pr->poly){
+                //     printf("The remainder is:\n");
+                //     printPolynomial(pr);
+                // }
+                // freePolynomial(pq);
+                // freePolynomial(pr);
+                // break;
+// term *getlastterm(term* t)
+// {
+//     term *temp = t;
+//     while(temp->next)
+//         temp = temp->next;
+//     return temp;
+// }
