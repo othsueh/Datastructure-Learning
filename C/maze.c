@@ -68,6 +68,7 @@ int main()
                 break;
             }
             if(maze[next.row][next.col] == 0){
+                printf("i = %d, <x,y> = <%d,%d>\n",i,temp.row,temp.col);
                 stack[i] = temp;
                 stack[++i] = next;
                 maze[next.row][next.col] = 1;
@@ -80,8 +81,8 @@ int main()
             i--;
         }
     }
-    for(int j = 0; j < i; j++){
-        printf("i = %d, <x,y,dir> = <%d,%d,%d>\n",j-1,stack[j].row,stack[j].col,stack[j].dir);
-    }
+    // for(int j = 0; j < i; j++){
+    //     printf("i = %d, <x,y,dir> = <%d,%d,%d>\n",j-1,stack[j].row,stack[j].col,stack[j].dir);
+    // }
     return 0;
 }
