@@ -17,9 +17,11 @@ typedef struct Node
 }Node;
 
 Node seq[MAX_SIZE];
+ElemType stack[MAX_SIZE];
+int top = -1;
 Status Empty(int i)
 {
-    if(!seq[i].next) return TRUE;
+    if(!seq[i].data) return TRUE;
     else return FALSE;
 }
 Status Compare(ElemType *a, ElemType *b)
@@ -32,10 +34,21 @@ Status Compare(ElemType *a, ElemType *b)
     }
     return FALSE;
 }
+Status InSeq(ElemType i, ElemType j)
+{
+    Node *p = seq[i].next;
+    while(p)
+    {
+        if(p->data == j) return TRUE;
+        p = p->next;
+    }
+    return FALSE;
+}
 Status addEqu(ElemType i, ElemType j)
 {
     Node *p = (Node *)malloc(sizeof(Node));
-    if(Compare(&i, &j)) return ERROR;
+    if(InSeq(i,j)) return ERROR;
+    if(!seq[i].data) seq[i].data = 1;
     Node *q = &seq[i];
     p->data = j;
     while(q->next) q = q->next;
@@ -47,16 +60,44 @@ Status visit(ElemType i)
     printf("%d ", i);
     return OK;
 }
+Status InStack(ElemType i)
+{
+    for(int j = 0; j < top; j++)
+        if(stack[j] == i) return TRUE;
+    return FALSE;
+}
+Status FreeNode(Node *p)
+{
+    p->data = 0;
+    Node *q = p->next;
+    while(q)
+    {
+        Node *j = q;
+        q = q->next;
+        free(j);
+    }
+    return OK;
+}
 Status visitEq(int i)
 {
+    stack[++top] = i;
     Node *p = seq[i].next;
     if(!p) return ERROR;
     while(p)
     {
-        visit(p->data);
+        if(!InStack(p->data)){
+            if(seq[p->data].next) visitEq(p->data);
+            else stack[++top] = p->data;
+        } 
         p = p->next;
     }
-    printf("\n");
+    while(stack[top]!=i)
+        visit(stack[top--]);
+    if(top == 0){
+        printf("\n");
+        top = -1;
+    }
+    FreeNode(&seq[i]);
     return OK;
 }
 
@@ -71,6 +112,9 @@ int main()
         }
         addEqu(i, j); 
     }
+    printf("============================\n");
+    printf("The equivalance relation is:\n");
+    printf("============================\n");
     for(i = 0; i < MAX_SIZE; i++)
     {
         if(!Empty(i)){
