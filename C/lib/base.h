@@ -42,6 +42,7 @@ typedef float       f32;
 typedef double      f64;
 typedef long double f128;
 typedef size_t      szt;
+typedef char *      str;
 // #endregion
 
 #endif  // __CISTER_UTILS_BASE_H
