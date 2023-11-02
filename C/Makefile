@@ -1,4 +1,4 @@
-all:
+jall:
 	# gcc orderArray.c -o orderArray
 	# gcc linkList.c -o linkList
 	# gcc sparseMatrix.c -o sparseMatrix
