@@ -103,9 +103,9 @@ Status InorderTravserse_Thr(BiTree T)
 void ClearBiTree(BiTree *T)
 {
     if(*T){
-        if((*T)->lchild)
+        if(!(*T)->lthread && (*T)->lchild)
             ClearBiTree(&(*T)->lchild);
-        if((*T)->rchild)
+        if(!(*T)->rthread && (*T)->rchild)
             ClearBiTree(&(*T)->rchild);
         free(*T);
         *T = NULL;
@@ -120,7 +120,7 @@ int main()
     createBitree(&T);
     InorderThreading(&H, T);
     InorderTravserse_Thr(H);
-    // ClearBiTree(&T);
-    // ClearBiTree(&(H->lchild));
+    ClearBiTree(&T);
+    free(H);
     return 0;
 }
