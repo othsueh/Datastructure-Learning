@@ -9,7 +9,7 @@ typedef struct BiTNode
     ElemType data;
     BiTree lchild, rchild;
 } BiTNode;
-String str;
+String strr;
 i32 treeIndex = 1;
 ElemType Nil = ' ';
 Status StrAssign(String T, char *chars)
@@ -32,7 +32,7 @@ Status InitBiTree(BiTree *T)
 }
 Status CreateBiTree(BiTree *T)
 {
-    ElemType ch = str[treeIndex++];
+    ElemType ch = strr[treeIndex++];
     if(ch == '#')
         *T = NULL;
     else{
@@ -168,7 +168,7 @@ int main()
 {
     BiTree tree;
     InitBiTree(&tree);
-	StrAssign(str,"ABDH#K###E##CFI###G#J##");
+	StrAssign(strr,"ABDH#K###E##CFI###G#J##");
     CreateBiTree(&tree);
     if(BiTreeEmpty(tree))
         printf("The tree is empty.\n");
