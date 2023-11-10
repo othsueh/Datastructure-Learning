@@ -65,6 +65,18 @@ Status Inthreading(BiTree T)
     }
     return OK;
 }
+Status Insert_right(BiTree *Thr, BiTree *new)
+{
+    BiTree temp;
+    temp = (*Thr)->rchild;
+    (*Thr)->rchild = *new;
+    (*Thr)->rthread = 0;
+    (*new)->rchild = temp;
+    (*new)->rthread = 1;
+    (*new)->lthread = 1;
+    (*new)->lchild = *Thr;
+    return OK;
+}
 Status InorderThreading(BiTree *Thr, BiTree T)
 {
     *Thr = (BiTree) malloc(sizeof(BiTNode));
@@ -119,6 +131,9 @@ int main()
     initBitree(&T);
     createBitree(&T);
     InorderThreading(&H, T);
+    BiTree new = (BiTree) malloc(sizeof(BiTNode));
+    new->data = 'J';
+    Insert_right(&T, &new);
     InorderTravserse_Thr(H);
     ClearBiTree(&T);
     free(H);
