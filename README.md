@@ -1,5 +1,5 @@
 # Datastructure-Learning
-Little Repository to store my Datastructure learning Code
+Little Repository that store my Datastructure learning Code
 
 [![Files](https://img.shields.io/badge/files-ccc?style=for-the-badge&logo=nintendo-3ds&labelColor=f00)](https://github.com/othsueh/Datastructure-Learning)
 
