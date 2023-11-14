@@ -68,11 +68,13 @@ Status Inthreading(BiTree T)
 Status Insert_right(BiTree *Thr, BiTree *new)
 {
     BiTree temp;
+    u8 thread;
     temp = (*Thr)->rchild;
+    thread = (*Thr)->rthread;
     (*Thr)->rchild = *new;
     (*Thr)->rthread = 0;
     (*new)->rchild = temp;
-    (*new)->rthread = 1;
+    (*new)->rthread = thread;
     (*new)->lthread = 1;
     (*new)->lchild = *Thr;
     return OK;
