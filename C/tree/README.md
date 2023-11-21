@@ -50,63 +50,27 @@
 - 計算表達式：二元樹常用於表示和計算數學表達式，其中每個內部節點代表一個運算符，葉節點代表運算元。
 ## funtions 
 ### inorder traversal
-inorder traverse a binary tree.
-```
-input: root node(root)
-process:
-    if: root is not null
-        inorder(root_left)
-        print(root)
-        inorder(root_right)
-```
+inorder traverse a binary tree.  
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/a05722d8-d7e8-4355-8627-f795c3b5e62a)
 ### preorder traversal
-preorder traverse a binary tree.
-```
-input: root node(root)
-process:
-    if: root is not null
-        print(root)
-        inorder(root_left)
-        inorder(root_right)
-```
+preorder traverse a binary tree.   
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/a447b90a-3ff3-4a56-8570-4495a5f2fed2)
+
 ### postorder traversal
-postorder traverse a binary tree.
-```
-input: root node(root)
-process:
-    if: root not null
-        inorder(root_left)
-        inorder(root_right)
-        print(root)
-```
+postorder traverse a binary tree.  
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/7e292c43-f6b6-4c0a-afe4-434d98e6f312)
+
 ### level traversal
 level traverse a binary tree.
-```
-input: root node(root)
-process:
-    init two value(front,rear)
-    init queue(que)
-    que[rear++] = root
-    loop: front not equal rear
-        init value(temp)
-        temp set que[front++]
-        print(temp)
-        if: temp_left not null
-            que[rear++] set temp_left
-        if: temp_right not null
-            que[rear++] set temp_right
-```
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/bb53ff2d-ebaa-4f24-b2c7-aaa51871dbb0)
+
 ### copy tree
 copy a binary tree.
-```
-input: root node(root)
-process:
-    if: root is not null
-        init ptr(new)
-        new_left set copy(root_left)
-        new_right set copy(root_right)
-        new_data set root_data
-        return new
-```
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/b0244e86-9f9d-44f4-9c78-1ddf3d6b45dd)
 
 
