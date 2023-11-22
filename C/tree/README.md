@@ -156,3 +156,14 @@ insert a new element in the tree
 remove a specific node from search binary tree
 
 ![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/5f0f422d-1b2d-470a-9af3-77ee1c21547e)
+
+# foreset
+## features
+- A set of n >= 0 disjoint trees.
+- Convert to binary tree with left-child, right-sibling method [ref][1].
+## applications
+- 計算機系統中的目錄結構：操作系統中的文件系統可以用森林來表示，其中每個目錄（或文件夾）作為一個樹。
+- 數據庫系統：在數據庫系統中，森林可以用於組織和索引數據，提高查詢效率。
+- 決策樹學習：在機器學習中，隨機森林算法使用多個決策樹來提高預測的準確性和健壯性。
+
+[1]: https://www.geeksforgeeks.org/left-child-right-sibling-representation-tree
