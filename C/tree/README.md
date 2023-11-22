@@ -73,4 +73,12 @@ copy a binary tree.
 
 ![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/b0244e86-9f9d-44f4-9c78-1ddf3d6b45dd)
 
-
+# Threaded binary tree
+## features
+- **use waste space**
+  For a n nodes typical binary tree, the number of total links is 2n, non-null link is n-1.
+  So there are 2n-(n-1)=n+1 links are wasted. So we can use the wasted space to do other functions.
+## applications
+- Lower the waste of space while in order traversal of binary tree(same speed)
+## funtions
+### 
