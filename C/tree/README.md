@@ -79,6 +79,80 @@ copy a binary tree.
   For a n nodes typical binary tree, the number of total links is 2n, non-null link is n-1.
   So there are 2n-(n-1)=n+1 links are wasted. So we can use the wasted space to do other functions.
 ## applications
-- Lower the waste of space while in order traversal of binary tree(same speed)
+- Lower the waste of space while in order traversal of binary tree(same speed $O(n)$ )
 ## funtions
-### 
+### inthreading
+make the thread of the tree.
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/1d47b9f2-fc26-4693-88d4-eaa3bdafb1a3)
+
+### inorder traversal
+inorder traverse a threaded binary tree. 
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/7358be1d-0bfd-4bf4-a505-a56b142671f3)
+
+### insert right
+insert a node in threaded binary tree
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/86a024be-068b-48a1-af10-aa58828252ca)
+
+# heap
+## features
+- the root of the heap contains max(min) element.
+- a kind of complete binary tree(have same properties)
+
+## applications/derivations
+- 優先隊列：在操作系統的任務調度、網絡流量管理等場景中用來管理具有不同優先級的任務或數據。
+- 堆排序：堆排序算法使用堆來實現高效的數據排序。
+- 圖算法中的最短路徑和最小生成樹：如 Dijkstra 算法和 Prim 算法中使用堆來管理節點。
+- 軟體和系統中使用堆結構來優化性能和資源管理，包括操作系統開發者、網絡設備製造商和大型云服務提供商
+
+## functions
+### downheap
+create a max heap by an unsort array.
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/90fd9388-9f33-48a3-9d8c-6e07a8cdd340)
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/b1667778-4907-46a7-abac-b19c006fef63)
+
+### insert 
+insert a new node into maxheap  
+Efficency: $O(log_2n)$
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/d47aaafc-9857-4077-acf4-6f8d2de92652)
+
+### pop
+pop a node from the root of maxheap  
+Efficency: $O(log_2n)$
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/13735ebd-ba5a-4210-8009-d4f69353c4d9)
+
+# Binary Search Tree
+## features
+- left child is smaller than root child
+- right child is larger than root child
+- speed up searching an arbitrary node.
+- best search, insert, delete speed: $O(h)$ h is the height of the tree. $log_2n$ is height in balance search tree.
+## applications/derivations
+- 平衡二元樹（如AVL樹）：在每個節點添加了平衡因子，以保持樹的平衡，從而優化搜索和插入操作的效率。
+- 紅黑樹：一種自平衡二元搜索樹，通過規則和顏色標記來保持大致的平衡，廣泛用於許多標準庫和框架的實現中。
+- B樹和B+樹：這些是為磁盤存儲和數據庫索引設計的樹結構，特點是有更寬的分支和更高的容量，以減少訪問磁盤的次數。
+- 數據庫管理：用於高效地管理和檢索數據庫中的數據。
+- 文件系統：在文件系統中用於組織和索引文件。
+- 搜索引擎：在搜索引擎中用於高效地處理大量的索引數據。
+
+## funtions
+### search
+search a specific element from root node.  
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/c7fb517e-996e-406b-91be-5d21485908be)
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/078d2fdb-d477-42a8-b15d-c120b3232335)
+
+### insert
+insert a new element in the tree
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/76481401-6e5f-45c0-b279-0c4304e98324)
+
+### delete
+remove a specific node from search binary tree
+
+![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/5f0f422d-1b2d-470a-9af3-77ee1c21547e)
