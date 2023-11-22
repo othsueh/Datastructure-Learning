@@ -117,12 +117,14 @@ create a max heap by an unsort array.
 
 ### insert 
 insert a new node into maxheap  
-Efficency: $O(log_2n)$
+Efficency: $O(log_2n)$  
+
 ![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/d47aaafc-9857-4077-acf4-6f8d2de92652)
 
 ### pop
 pop a node from the root of maxheap  
-Efficency: $O(log_2n)$
+Efficency: $O(log_2n)$  
+
 ![image](https://github.com/othsueh/Datastructure-Learning/assets/69002793/13735ebd-ba5a-4210-8009-d4f69353c4d9)
 
 # Binary Search Tree
