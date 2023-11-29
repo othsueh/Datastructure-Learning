@@ -21,6 +21,7 @@ void commandList()
     printf("(6) Compute balance factor of a specfic node\n");
     printf("(7) Find the k-th Smallest Element\n");
     printf("(8) Exit\n");
+    printf("Command: ");
 }
 void init(tree *t)
 {
@@ -49,7 +50,6 @@ Status tree_empty(tree t)
     else
         return TRUE;
 }
-
 Status insert_node(tree *t, ElementType key)
 {
     if(tree_empty(*t)){
@@ -59,6 +59,7 @@ Status insert_node(tree *t, ElementType key)
         (*t)->data = key;
         (*t)->left = NULL;
         (*t)->right = NULL;
+        return OK;
     }
     else if((*t)->data == key) 
         return ERROR;
@@ -66,6 +67,17 @@ Status insert_node(tree *t, ElementType key)
         insert_node(&(*t)->left, key);
     else
         insert_node(&(*t)->right, key);
+}
+Status clear_tree(tree *t)
+{
+    if(tree_empty(*t))
+        return ERROR;
+    if((*t)->left)
+        clear_tree(&(*t)->left);
+    if((*t)->right)
+        clear_tree(&(*t)->right);
+    free(*t);
+    *t = NULL;
     return OK;
 }
 void InOrderTraverse(tree T)
@@ -75,6 +87,24 @@ void InOrderTraverse(tree T)
     InOrderTraverse(T->left);
     printf(" %d",T->data);
     InOrderTraverse(T->right);
+}
+void find_kth(tree t, u32 k, u32 *count, u32 *result)
+{
+    if(t){
+        find_kth(t->left, k, count, result);
+        if(++(*count) == k){
+            *result = t->data;
+            return;
+        }
+        find_kth(t->right, k, count, result);
+    }
+}
+void kth_smallest(tree t, u32 k)
+{
+    u32 count = 0;
+    u32 result = -1;
+    find_kth(t, k, &count, &result);
+    printf("%d\n", result);
 }
 tree* search_min(tree *t)
 {
@@ -101,6 +131,7 @@ Status delete_tree(tree *t, ElementType key)
                 *t = (*t)->left;
             else
                 *t = (*t)->right;
+            length--;
             free(tmp);
         }
     }
@@ -121,21 +152,33 @@ tree recur_search(tree t, ElementType key)
     else
         return recur_search(t->right, key);
 }
-Status clear_tree(tree *t)
+ElementType treeDepth(tree T)
 {
-    if(tree_empty(*t))
-        return ERROR;
-    if((*t)->left)
-        clear_tree(&(*t)->left);
-    if((*t)->right)
-        clear_tree(&(*t)->right);
-    free(*t);
-    *t = NULL;
-    return OK;
+    ElementType i, j;
+    if(!T)
+        return 0;
+    if(T->left)
+        i = treeDepth(T->left);
+    else
+        i = 0;
+    if(T->right)
+        j = treeDepth(T->right);
+    else 
+        j = 0;
+    return i > j ? i + 1 : j + 1;
+}
+ElementType balance_factor(tree t, ElementType k)
+{
+    tree tmp = recur_search(t, k);
+    if(tree_empty(tmp))
+        return 0;
+    return treeDepth(tmp->left) - treeDepth(tmp->right);
 }
 int main() {
     tree t;
+    init(&t);
     u8 command = 0;
+    ElementType key;
     while(command != 8){
         commandList();
         scanf(" %d", &command);
@@ -146,36 +189,63 @@ int main() {
                 printf("input file path: ");
                 scanf(" %s", filename);
                 read(filename);
-                init(&t);
                 for(i32 i = 0; i < length; i++)
                     insert_node(&t, nodes[i]);   
                 break;
             case 2:
                 printf("input ID: ");
-                ElementType ikey;
-                scanf(" %d", &ikey);
-                insert_node(&t, ikey);
+                scanf(" %d", &key);
+                if(insert_node(&t, key))
+                    length++;
+                else{ 
+                    printf("output: ");
+                    printf("insert %d failed, already exists.\n", key);
+                }
                 break;
             case 3:
                 printf("input ID: ");
-                ElementType dkey;
-                scanf(" %d", &dkey);
-                if(!delete_tree(&t, dkey))
-                    printf("delete %d failed\n", dkey);
+                scanf(" %d", &key);
+                if(!delete_tree(&t, key)){
+                    printf("output: ");
+                    printf("delete %d failed, not found.\n", key);
+                }
                 break;
             case 4:
                 printf("input ID: ");
-                ElementType skey;
-                scanf(" %d", &skey);
-                if(recur_search(t, skey))
+                scanf(" %d", &key);
+                printf("output: ");
+                if(recur_search(t, key))
                     printf("find it\n");
                 else
                     printf("not found\n");
                 break;
             case 5:
+                if(tree_empty(t)){
+                    printf("tree is empty");
+                    break;
+                }
+                printf("output:");
                 InOrderTraverse(t);
                 printf("\n");
                 break; 
+            case 6:
+                printf("input ID: ");
+                scanf(" %d", &key);
+                printf("output: ");
+                if(!recur_search(t, key))
+                    printf("not found\n");
+                else
+                    printf("%d\n", balance_factor(t, key));
+                break;
+            case 7: 
+                printf("input k between [1,%d]: ", length);
+                scanf(" %d", &key);
+                printf("output: ");
+                if(key < 1 || key > length)
+                    printf("k out of range\n");
+                else
+                    kth_smallest(t, key);
+                break;
             case 8:
                 clear_tree(&t);
                 if(!tree_empty(t))
