@@ -3,6 +3,18 @@
 #include "../lib/algobase.h"
 #define Elementype i32
 
+i32 graphList[10][2] = {
+    {0,1},
+    {0,2},
+    {1,3},
+    {1,4},
+    {2,5},
+    {2,6},
+    {3,7},
+    {4,7},
+    {5,7},
+    {6,7}
+};
 typedef struct edge* edgeptr;
 typedef struct edge{
     u8 marked;
@@ -12,16 +24,15 @@ typedef struct edge{
 
 typedef struct graph {
     u32 n;
+    u8 *visited;
     edgeptr* edges;
 } graph;
 
-Status createGraph(graph*g, u32 n){
-    g->n = n;
-    g->edges = (edgeptr*)malloc(sizeof(edgeptr)*n);
-    for (u32 i = 0; i < n; ++i) {
-        g->edges[i] = NULL;
+Status emptyGraph(graph g){
+    for(u32 i = 0; i < g.n; i++){
+        if(g.edges[i]) return FALSE;
     }
-    return OK;
+    return TRUE;
 }
 void maintainEdge(graph* g,Elementype v, edgeptr* e){
     edgeptr* temp = &g->edges[v];
@@ -67,7 +78,62 @@ Status addEdge(graph* g, Elementype v1, Elementype v2){
     }
     return OK;
 }
-Status printGraph(graph g){
+Status initGraph(graph*g, u32 n){
+    g->n = n;
+    g->edges = (edgeptr*)malloc(sizeof(edgeptr)*n);
+    for (u32 i = 0; i < n; ++i) {
+        g->edges[i] = NULL;
+    }
+    return OK;
+}
+Status createGraph(graph* g, u32 n){
+    initGraph(g, n);
+    g->visited = (u8*)malloc(sizeof(u8)*n);
+    for(u32 i = 0; i < 10; i++){
+        addEdge(g, graphList[i][0], graphList[i][1]);
+    }
+    return OK;
+}
+void dfsTree(edgeptr *e){
+    if(*e && (*e)->marked == 0){
+        (*e)->marked = 1;     
+        if((*e)->p1){
+            if((*e)->p1->marked == 0){
+                dfsTree(&((*e)->p1));
+            } 
+            else (*e)->p1 = NULL;
+        }
+        if((*e)->p2){
+            if((*e)->p2->marked == 0){
+                dfsTree(&((*e)->p2));
+            } 
+            else (*e)->p2 = NULL;
+        }
+    }
+}
+void deleteTree(edgeptr *e){
+    if(*e){
+        deleteTree(&((*e)->p1));
+        (*e)->p1 = NULL;
+        deleteTree(&((*e)->p2));
+        (*e)->p2 = NULL;
+        free(*e);
+        *e = NULL;
+    }
+}
+void cleanGraph(graph* g) {
+    if (g == NULL) return;
+    for(u32 i = 0; i < g->n; i++){
+        edgeptr e = g->edges[i];
+        dfsTree(&e);
+    }
+    edgeptr e = g->edges[0];
+    deleteTree(&e);
+    free(g->edges);
+    g->n = 0;
+}
+Status printGraph(graph g)
+{
     for(u32 i = 0; i < g.n; ++i){
         printf("%d: ", i);
         edgeptr e = g.edges[i];
@@ -78,16 +144,29 @@ Status printGraph(graph g){
         printf("\n");
     }
 }
-
+void dfsTraverse(graph g, u32 v)
+{
+    if(v >= g.n) return;
+    edgeptr e = g.edges[v];
+    printf(" %d", v);
+    g.visited[v] = 1;
+    while(e){
+        if(e->v1 == v && g.visited[e->v2] == 0)
+            dfsTraverse(g, e->v2);
+        else if(e->v2 == v && g.visited[e->v1] == 0)
+            dfsTraverse(g, e->v1); 
+        e = e->v1 == v ? e->p1 : e->p2;
+    }
+    return;
+}
 int main() {
     graph g;
-    createGraph(&g, 5);
-    addEdge(&g, 0, 1);
-    addEdge(&g, 0, 2);
-    addEdge(&g, 0, 3);
-    addEdge(&g, 1, 2);
-    addEdge(&g, 1, 3);
-    addEdge(&g, 2, 3);
+    createGraph(&g, 8);  
     printGraph(g);
+    dfsTraverse(g, 7);
+    printf("\n");
+    cleanGraph(&g);
+    if(emptyGraph(g)) printf("Empty\n");
+    else printf("Not Empty\n");
     return 0;
 }
