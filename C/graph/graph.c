@@ -27,7 +27,11 @@ typedef struct graph {
     u8 *visited;
     edgeptr* edges;
 } graph;
-
+typedef struct Node* queue;
+typedef struct Node {
+    Elementype value;
+    queue link;
+}Node;
 Status emptyGraph(graph g){
     for(u32 i = 0; i < g.n; i++){
         if(g.edges[i]) return FALSE;
@@ -94,8 +98,9 @@ Status createGraph(graph* g, u32 n){
     }
     return OK;
 }
+//Change the graph to a tree(for deleting)
 void dfsTree(edgeptr *e){
-    if(*e && (*e)->marked == 0){
+    if(*e){
         (*e)->marked = 1;     
         if((*e)->p1){
             if((*e)->p1->marked == 0){
@@ -111,6 +116,7 @@ void dfsTree(edgeptr *e){
         }
     }
 }
+//Delete the tree
 void deleteTree(edgeptr *e){
     if(*e){
         deleteTree(&((*e)->p1));
@@ -123,12 +129,9 @@ void deleteTree(edgeptr *e){
 }
 void cleanGraph(graph* g) {
     if (g == NULL) return;
-    for(u32 i = 0; i < g->n; i++){
-        edgeptr e = g->edges[i];
-        dfsTree(&e);
-    }
-    edgeptr e = g->edges[0];
-    deleteTree(&e);
+    edgeptr *e = &(g->edges[0]);
+    dfsTree(e);
+    deleteTree(e);
     free(g->edges);
     g->n = 0;
 }
@@ -143,6 +146,11 @@ Status printGraph(graph g)
         }
         printf("\n");
     }
+}
+void visitedclean(graph *g)
+{
+    for(u32 i = 0; i < g->n; i++)
+        g->visited[i] = 0; 
 }
 void dfsTraverse(graph g, u32 v)
 {
@@ -159,11 +167,63 @@ void dfsTraverse(graph g, u32 v)
     }
     return;
 }
+void addq(queue* front, queue* rear, Elementype v)
+{
+    queue temp = (queue)malloc(sizeof(Node));
+    temp->value = v;
+    temp->link = NULL;
+    if(!*front && !*rear){
+        *front = temp;
+        *rear = temp;
+    }else{
+        (*rear)->link = temp;
+        *rear = temp;
+    } 
+}
+Elementype deleteq(queue* front, queue* rear)
+{
+    if(*front == NULL)
+        return -1;
+    queue temp = *front;
+    Elementype pop = temp->value;
+    *front = (*front)->link;
+    if(*rear == temp) 
+        *rear = *front;
+    free(temp);
+    return pop;
+}
+void bfsTraverse(graph g, u32 v)
+{
+    if(v >= g.n) return;
+    queue front, rear;
+    front = rear = NULL;
+    printf(" %d",v);
+    g.visited[v] = 1; 
+    addq(&front,&rear,v);
+    while(front){
+        v = deleteq(&front,&rear);
+        edgeptr e = g.edges[v];
+        while(e){
+            Elementype t = e->v1 == v ? e->v2 : e->v1;
+            if(!g.visited[t]){
+                printf(" %d",t);
+                g.visited[t] = 1;
+                addq(&front, &rear, t);
+            }
+            e = e->v1 == v ? e->p1 : e->p2;
+        }
+    }
+    
+}
 int main() {
     graph g;
     createGraph(&g, 8);  
     printGraph(g);
     dfsTraverse(g, 7);
+    visitedclean(&g);
+    printf("\n");
+    bfsTraverse(g, 7);
+    visitedclean(&g);
     printf("\n");
     cleanGraph(&g);
     if(emptyGraph(g)) printf("Empty\n");
