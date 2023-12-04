@@ -1,5 +1,5 @@
 all:
-	gcc graph.c -o graph -lm
+	gcc biconnect.c -o biconnect -lm
 
 clean:
-	rm -f graph
+	rm -f biconnect

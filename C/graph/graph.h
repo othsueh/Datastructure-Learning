@@ -3,18 +3,18 @@
 #include "../lib/algobase.h"
 #define Elementype i32
 
-i32 graphList[10][2] = {
-    {0,1},
-    {0,2},
-    {1,3},
-    {1,4},
-    {2,5},
-    {2,6},
-    {3,7},
-    {4,7},
-    {5,7},
-    {6,7}
-};
+// i32 graphList[10][2] = {
+//     {0,1},
+//     {0,2},
+//     {1,3},
+//     {1,4},
+//     {2,5},
+//     {2,6},
+//     {3,7},
+//     {4,7},
+//     {5,7},
+//     {6,7}
+// };
 typedef struct edge* edgeptr;
 typedef struct edge{
     u8 marked;
@@ -90,14 +90,15 @@ Status initGraph(graph*g, u32 n){
     }
     return OK;
 }
-Status createGraph(graph* g, u32 n){
-    initGraph(g, n);
-    g->visited = (u8*)malloc(sizeof(u8)*n);
-    for(u32 i = 0; i < 10; i++){
-        addEdge(g, graphList[i][0], graphList[i][1]);
-    }
-    return OK;
-}
+// Status createGraph(graph* g, u32 n){
+//     initGraph(g, n);
+//     g->visited = (u8*)malloc(sizeof(u8)*n);
+//     u32 length = sizeof(graphList)/sizeof(graphList[0]);
+//     for(u32 i = 0; i < 10; i++){
+//         addEdge(g, graphList[i][0], graphList[i][1]);
+//     }
+//     return OK;
+// }
 //Change the graph to a tree(for deleting)
 void dfsTree(edgeptr *e){
     if(*e){
@@ -133,6 +134,7 @@ void cleanGraph(graph* g) {
     dfsTree(e);
     deleteTree(e);
     free(g->edges);
+    free(g->visited);
     g->n = 0;
 }
 Status printGraph(graph g)
@@ -215,18 +217,18 @@ void bfsTraverse(graph g, u32 v)
     }
     
 }
-int main() {
-    graph g;
-    createGraph(&g, 8);  
-    printGraph(g);
-    dfsTraverse(g, 7);
-    visitedclean(&g);
-    printf("\n");
-    bfsTraverse(g, 7);
-    visitedclean(&g);
-    printf("\n");
-    cleanGraph(&g);
-    if(emptyGraph(g)) printf("Empty\n");
-    else printf("Not Empty\n");
-    return 0;
-}
+// int main() {
+//     graph g;
+//     createGraph(&g, 8);  
+//     printGraph(g);
+//     dfsTraverse(g, 7);
+//     visitedclean(&g);
+//     printf("\n");
+//     bfsTraverse(g, 7);
+//     visitedclean(&g);
+//     printf("\n");
+//     cleanGraph(&g);
+//     if(emptyGraph(g)) printf("Empty\n");
+//     else printf("Not Empty\n");
+//     return 0;
+// }
