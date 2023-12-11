@@ -113,6 +113,37 @@ void heapSort(Elementype list[], i32 n)
         downheap(list, 0, i);
     }
 }
+void merge(Elementype list[], i32 l, i32 mid, i32 r)
+{
+    i32 i, j, k;
+    i32 n1 = mid - l + 1; 
+    i32 n2 = r - mid;
+    Elementype L[n1], R[n2];
+    for(i = 0; i < n1; i++)
+        L[i] = list[l+i];
+    for(j = 0; j < n2; j++)
+        R[j] = list[mid+1+j];
+    i = 0, j = 0, k = l;
+    while(i < n1 && j < n2){
+        if(L[i] <= R[j])
+            list[k++] = L[i++];
+        else
+            list[k++] = R[j++];
+    }
+    while(i < n1)
+        list[k++] = L[i++];
+    while(j < n2)
+        list[k++] = R[j++];
+}
+void mergeSort(Elementype list[], i32 l, i32 r)
+{
+    if(l < r){
+        i32 mid = l + (r-l)/2;
+        mergeSort(list, l, mid);
+        mergeSort(list, mid+1, r);
+        merge(list, l, mid, r);
+    }
+}
 int main()
 {
     Elementype a[10] = {0};
@@ -122,6 +153,7 @@ int main()
     // insertionSort(a, 10);
     // quickSort(a, 0, 9);
     // radixSort(a, 10);
-    heapSort(a, 10);
+    // heapSort(a, 10);
+    mergeSort(a, 0, 9);
     printArray(a, 10); 
 }
