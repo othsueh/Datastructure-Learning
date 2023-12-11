@@ -17,15 +17,15 @@ void randomArray(Elementype *list, i32 length)
         list[i] = rand() % 100;
     }
 }
-void swap(int* a, int* b) {
-    int t = *a;
+void swap(Elementype* a, Elementype* b) {
+    Elementype t = *a;
     *a = *b;
     *b = t;
 }
-void quickSort(int arr[], int low, int high) {
+void quickSort(Elementype arr[], i32 low, i32 high) {
     if (low < high) {
-        int pivot = arr[high];
-        int i = low - 1;
+        Elementype pivot = arr[high];
+        i32 i = low - 1;
         for (int j = low; j < high; j++) {
             if (arr[j] < pivot) {
                 i++;
@@ -34,12 +34,12 @@ void quickSort(int arr[], int low, int high) {
             printArray(arr, 10);
         }
         swap(&arr[++i], &arr[high]); // The pivot is in the right place
-        int pi = i;
+        i32 pi = i;
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);
     }
 }
-void insertion_sort(Elementype list[], i32 length)
+void insertionSort(Elementype list[], i32 length)
 {
     Elementype next;
     for(i32 i = 1; i < length; i++)
@@ -54,12 +54,46 @@ void insertion_sort(Elementype list[], i32 length)
         list[j] = next;
     }
 }
+int getMax(Elementype arr[], i32 n)
+{
+    Elementype max = arr[0];
+    for(i32 i = 1; i < n; i++)
+    {
+        if(arr[i] > max)
+        {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+void countSort(Elementype arr[], i32 n, i32 exp)
+{
+    Elementype output[n];
+    i32 count[10] = {0};
+    for(i32 i = 0; i<n; i++)
+        count[arr[i]/exp%10]++;
+    for(i32 i = 1; i < 10; i++)
+        count[i] += count[i-1];
+    for(i32 i = n-1; i >= 0; i--)
+        output[--count[arr[i]/exp%10]] = arr[i];
+    for(i32 i = 0; i < n; i++) 
+        arr[i] = output[i];
+}
+void radixSort(Elementype arr[], i32 n)
+{
+    Elementype m = getMax(arr, n);
+    for(i32 exp = 1; m/exp > 0; exp *= 10)
+        countSort(arr, n, exp);
+    return;
+}
 int main()
 {
     Elementype a[10] = {0};
     randomArray(a, 10);
     printf("Before sort: ");
     printArray(a, 10); 
-    quickSort(a, 0, 9);
+    // insertionSort(a, 10);
+    // quickSort(a, 0, 9);
+    // radixSort(a, 10);
     printArray(a, 10); 
 }
