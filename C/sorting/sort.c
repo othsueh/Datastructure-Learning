@@ -54,7 +54,7 @@ void insertionSort(Elementype list[], i32 length)
         list[j] = next;
     }
 }
-int getMax(Elementype arr[], i32 n)
+i32 getMax(Elementype arr[], i32 n)
 {
     Elementype max = arr[0];
     for(i32 i = 1; i < n; i++)
@@ -66,6 +66,7 @@ int getMax(Elementype arr[], i32 n)
     }
     return max;
 }
+
 void countSort(Elementype arr[], i32 n, i32 exp)
 {
     Elementype output[n];
@@ -86,6 +87,32 @@ void radixSort(Elementype arr[], i32 n)
         countSort(arr, n, exp);
     return;
 }
+
+void downheap(Elementype heap[], i32 i, i32 n)
+{
+    i32 largest = i;
+    i32 l = 2*i+1;
+    i32 r = 2*i+2;
+    if(l<n && heap[l]>heap[largest])
+        largest = l;
+    if(r<n && heap[r]>heap[largest])
+        largest = r;
+    if(largest != i){
+        i32 temp = heap[i];
+        heap[i] = heap[largest];
+        heap[largest] = temp;
+        downheap(heap, largest, n);
+    }
+}
+void heapSort(Elementype list[], i32 n)
+{
+    for(i32 i= n/2-1; i>=0;i--)     
+        downheap(list, i, n);
+    for(i32 i = n-1; i>0; i--){
+        swap(&list[0], &list[i]);
+        downheap(list, 0, i);
+    }
+}
 int main()
 {
     Elementype a[10] = {0};
@@ -95,5 +122,6 @@ int main()
     // insertionSort(a, 10);
     // quickSort(a, 0, 9);
     // radixSort(a, 10);
+    heapSort(a, 10);
     printArray(a, 10); 
 }
